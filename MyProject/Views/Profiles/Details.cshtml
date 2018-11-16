@@ -1,0 +1,66 @@
+﻿@model MyProject.Models.Profile
+
+@{
+    ViewBag.Title = "Profil - szczegóły";
+}
+
+<h2>Szczegóły profilu</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Login)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Login)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Age)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Age)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsMale)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsMale)
+        </dd>
+
+    </dl>
+</div>
+@if (Context.User.IsInRole("Administrator"))
+{
+<p>
+    @Html.ActionLink("Edytuj", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Powrót", "Index")
+</p>
+}
+else
+{
+    <h2>Brak uprawnień</h2>
+    <h3>Aby uzyskać dostęp @Html.ActionLink("zaloguj się", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" }) </h3>
+    @Html.ActionLink("Powrót", "Index", "Home")
+}

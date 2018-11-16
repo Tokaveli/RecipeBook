@@ -1,0 +1,73 @@
+﻿@model PagedList.IPagedList<MyProject.Models.Recipe>
+
+
+@{
+    ViewBag.Title = "Strona główna";
+}
+
+@using (Html.BeginForm("Index", "Recipes", FormMethod.Get))
+{
+
+}
+<div class="col-md-4">
+    <h2>Najlepsze przepisy</h2>
+    <table class="table">
+
+        <tr>
+        </tr>
+        @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @if (@item.Picture == null)
+                    {
+                        <i>Brak obrazka</i>
+                    }
+                    else
+                    {
+                        <img src="~/Pictures/@item.Picture" alt="" align="top" height="60" width="60" />
+                    }
+                    </td>
+                <td>
+                    @Html.ActionLink(item.Name, "Details", "Recipes", new { id = item.ID }, null)
+                </td>
+
+                <td>
+                  by <b> @Html.ActionLink(item.Profile.FirstName, "Index", "HisRecipe", new { name = item.Profile.Login}, null)</b>
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+<div class="row">
+    <div class="col-md-1"></div>
+        <div class="col-md-5">
+            <p>
+                .
+            </p>
+            <h3>Zacznij swoją przygodę z gotowaniem</h3>
+            <p>
+                <h4>
+                    Aby dodawać swoje przepisy do serwisu zarejestruj się.
+                </h4>
+                </p>
+
+            <p>
+                <h4>
+                    Zaraz potem możesz dodawać przepisy kucharskie przedstawiając swoje smakowite dania całemu światu.
+                </h4>
+            </p>
+            <p><h4>
+                Dodawaj składniki, opisuj procedury, a jeśli posiadasz zdjęcia swoich potraw to zamieść je koniecznie.
+                Stwórz własną książkę kucharską i pamiętaj</h4> <h3><i><b>Gotowanie jest proste!</b></i>
+                </h3>
+            </p>
+
+        </div>
+
+
+    </div>
+<br />
+

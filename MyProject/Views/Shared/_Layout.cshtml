@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Książka kucharska", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Przepisy <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+
+                            <li>@Html.ActionLink("Przepisy", "Index", "Recipes")</li>
+                            @if (Request.IsAuthenticated)
+                            {
+                                <li>@Html.ActionLink("Moje przepisy", "Index", "MyRecipe")</li>
+                            }
+
+                        </ul>
+                    </li>
+                    
+
+                @if (Request.IsAuthenticated)
+                {
+                    <li>@Html.ActionLink("Ulubione", "Index", "RecipeLikes")</li>
+
+
+                }
+                <li>@Html.ActionLink("Statystyki", "About", "Home")</li>
+                <li>@Html.ActionLink("Kontakt", "Contact", "Home")</li>
+
+                @if (Context.User.IsInRole("Administrator"))
+                {
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                           aria-haspopup="true" aria-expanded="false">Zarządzaj <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Kategorie", "Index", "Categories")</li>
+                            <li>@Html.ActionLink("Komentarze", "Index", "Comments")</li>
+                            <li>@Html.ActionLink("Oceny", "Index", "Ratings")</li>
+                            <li>@Html.ActionLink("Pory dnia", "Index", "Types")</li>
+                            <li>@Html.ActionLink("Użytkownicy", "Index", "Profiles")</li>
+                        </ul>
+                    </li>
+                }
+                </ul>
+
+                @Html.Partial("_LoginPartial")
+            </div>
+
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Application by Przemysław Tokarski </p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

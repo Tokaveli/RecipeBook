@@ -1,0 +1,42 @@
+﻿@model IEnumerable<MyProject.Models.Category>
+
+@{
+    ViewBag.Title = "Kategorie";
+}
+
+<h2>Zarządzaj kategoriami</h2>
+@if (Context.User.IsInRole("Administrator"))
+{
+<p>
+    @Html.ActionLink("Utwórz kategorię", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.ActionLink("Edytuj", "Edit", new { id=item.ID }, new { @class = "btn btn-primary" }) 
+            @Html.ActionLink("Usuń", "Delete", new { id=item.ID }, new { @class = "btn btn-danger" })
+        </td>
+    </tr>
+}
+
+</table>
+@Html.ActionLink("Powrót do panelu administratora", "Index", "Admin")
+
+
+}
+else
+{
+    <h2>Brak uprawnień</h2>
+    @Html.ActionLink("Powrót", "Index", "Home")
+}

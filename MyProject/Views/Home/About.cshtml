@@ -1,0 +1,36 @@
+﻿@model IEnumerable<MyProject.ViewModels.CategoryRecipesGroup>
+
+@{
+    ViewBag.Title = "Statystyki";
+}
+
+<h2>Ilość przepisów w poszczególnych kategoriach</h2>
+
+<table>
+    <tr>
+
+        <th>
+            Kategoria
+        </th>
+      
+        <th>
+           Ilość
+        </th>
+
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.categories.Name)
+            </td>
+            
+            <td>
+                @item.RecipesCount
+            </td>
+
+        </tr>
+    }
+</table>

@@ -1,0 +1,132 @@
+﻿@model PagedList.IPagedList<MyProject.Models.RecipeLike>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@{
+    ViewBag.Title = "Ulubione przepisy";
+}
+
+<h2>Ulubione przepisy</h2>
+
+@using (Html.BeginForm("Index", "RecipeLikes", FormMethod.Get))
+{
+    <p>
+        Szukaj po nazwie: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        <button type="submit">
+            <span class="glyphicon glyphicon-search"></span>
+        </button>
+    </p>
+
+    <form action="/RecipeLikes" method="get">
+        Wybierz kategorię:
+
+        <select name="categoryFilter">
+            <option></option>
+
+            @foreach (var category in @ViewBag.Categories)
+            {
+                <option value="@category.Name" @if (@ViewBag.CategoryFilter == @category.Name) { @Html.Raw("selected")  }>@category.Name</option>
+            }
+        </select>
+
+        <input type="submit" class="btn btn-secondary" value="Filtruj" />
+
+        Wybierz porę dnia:
+
+        <select name="typesFilter">
+            <option></option>
+
+            @foreach (var types in @ViewBag.Types)
+            {
+                <option value="@types.Name" @if (@ViewBag.TypesFilter == @types.Name) { @Html.Raw("selected")     }>@types.Name</option>
+            }
+        </select>
+
+        <input type="submit" class="btn btn-secondary" value="Filtruj" />
+    </form>
+
+
+        <br>
+}
+
+        <table class="table">
+
+            <tr>
+                <th>Zdjęcia</th>
+                <th>
+                    @Html.ActionLink("Nazwa", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+                </th>
+
+                <th>
+                    @Html.ActionLink("Kategoria", "Index", new { sortOrder = ViewBag.CategorySortParm, currentFilter = ViewBag.CurrentFilter })
+                </th>
+
+                <th>
+                    Opis
+                </th>
+                <th>
+                    @Html.ActionLink("Ocena", "Index", new { sortOrder = ViewBag.RateSortParm, currentFilter = ViewBag.CurrentFilter })
+                </th>
+                <th>
+                    Profil
+                </th>
+                <th></th>
+            </tr>
+
+
+            @foreach (var item in Model)
+            {
+
+                if (item.Profile.Login == User.Identity.Name)
+                {
+
+
+
+                    <tr>
+                        <td>
+                            @if (@item.Recipe.Picture == null)
+                            {
+                                <i>Brak obrazka</i>
+                            }
+                            else
+                            {
+                                <img src="~/Pictures/@item.Recipe.Picture" alt="" align="top" height="60" width="60" />
+                            }
+                        <td>
+                            @Html.ActionLink(item.Recipe.Name, "Details", "Recipes", new { id = item.Recipe.ID }, null)                            
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Recipe.Categories.Name)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Recipe.Description).ToString().Substring(0, (item.Recipe.Description.Length > 20) ? 20 : item.Recipe.Description.Length)
+                        </td>
+                        <td>
+                            @if (@item.Recipe.Ratings.Count() == 0)
+                            {
+                                <i>Brak oceny</i>
+                            }
+                            else
+                            {
+                                @(item.Recipe.Ratings.Average(r => r.Rate)) <span style="color:gold" class="glyphicon glyphicon-star"></span>
+                            }
+                        </td>
+                        <td>
+                            @Html.ActionLink(item.Profile.FirstName, "Index", "HisRecipe", new { name = item.Profile.Login }, null)
+                        </td>
+
+                        <td>
+                            @Html.ActionLink("Usuń", "Delete2", new { id = item.ID }, new {onclick = "return confirm('Jesteś pewien, że chcesz usunąć ten przepis z ulubionych?');", @class = "btn btn-danger"  })
+                        </td>
+                    </tr>
+                }
+            }
+
+        </table>
+
+        <br />
+        Strona @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) z @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

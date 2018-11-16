@@ -1,0 +1,41 @@
+﻿@model MyProject.Models.Type
+
+@{
+    ViewBag.Title = "Pory dnia - usuń";
+}
+@if (Context.User.IsInRole("Administrator"))
+{
+<h2>Usuń porę dnia</h2>
+
+<h3>Jesteś pewien, że chcesz usunąć porę dnia?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Usuń" class="btn btn-default" /> |
+            @Html.ActionLink("Powrót", "Index")
+        </div>
+    }
+</div>
+
+
+}
+else
+{
+    <h2>Brak uprawnień</h2>
+    <h3>Aby uzyskać dostęp @Html.ActionLink("zaloguj się", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" }) </h3>
+    @Html.ActionLink("Powrót", "Index", "Home")
+}

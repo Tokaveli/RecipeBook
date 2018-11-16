@@ -1,0 +1,69 @@
+﻿@model MyProject.Models.Recipe
+
+@{
+    ViewBag.Title = "Usuń" + @Html.DisplayFor(model => model.Name);
+
+}
+@if (Context.User.IsInRole("Administrator") || Model.Profile.Login == User.Identity.Name)
+{
+<h2>Usuń przepis</h2>
+
+
+    using (Html.BeginForm("Delete", "Recipes", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken();
+
+
+<h3>Jesteś pewien, że chcesz usunąć ten przepis?</h3>
+<div>
+    
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Categories.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Categories.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Components)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Components)
+        </dd>
+
+    </dl>
+        <div class="form-actions no-color">
+            <input type="submit" value="Usuń" class="btn btn-default" />            
+        </div>
+    <br />
+    @Html.ActionLink("Powrót", "Index")
+
+</div>
+    }
+}
+
+else
+{
+    <h2>Brak uprawnień</h2>
+    <h3>Aby uzyskać dostęp @Html.ActionLink("zaloguj się", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" }) </h3>
+    @Html.ActionLink("Powrót", "Index", "Home")
+}

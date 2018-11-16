@@ -1,0 +1,48 @@
+﻿
+@{
+    ViewBag.Title = "Panel zarządzania";
+}
+
+<h2>Panel zarządzania</h2>
+
+@{
+    ViewBag.Title = "Panel zarządzania";
+}
+<div>
+@if (Context.User.IsInRole("Administrator"))
+{
+
+    <dl class="dl-horizontal">
+
+        <dt>
+            @Html.Label("Komentarze", htmlAttributes: new { @class = "control-label col-md" })
+        </dt>
+        <dd>@Html.ActionLink("[ Zarządzaj ]", "Index", "Comments")</dd>
+
+        <dt>
+            @Html.Label("Oceny", htmlAttributes: new { @class = "control-label col-md" })            
+        </dt>
+        <dd>
+            @Html.ActionLink("[ Zarządzaj ]", "Index", "Ratings")
+        </dd>
+
+        <dt>
+            @Html.Label("Pory dnia", htmlAttributes: new { @class = "control-label col-md" })
+        </dt>
+        <dd>@Html.ActionLink("[ Zarządzaj ]", "Index", "Types")</dd>
+
+        <dt>
+            @Html.Label("Użytkownicy", htmlAttributes: new { @class = "control-label col-md" })
+        </dt>
+        <dd>@Html.ActionLink("[ Zarządzaj ]", "Index", "Profiles")</dd>
+
+        </dl>
+}
+else
+{
+    <h2>Brak uprawnień</h2>
+    <h3>Aby uzyskać dostęp @Html.ActionLink("zaloguj się", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" }) </h3>
+    @Html.ActionLink("Powrót", "Index", "Home")
+}
+
+</div>

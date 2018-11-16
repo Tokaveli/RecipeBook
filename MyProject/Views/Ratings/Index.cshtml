@@ -1,0 +1,53 @@
+﻿@model IEnumerable<MyProject.Models.Rating>
+
+@{
+    ViewBag.Title = "Oceny";
+}
+@if (Context.User.IsInRole("Administrator"))
+{
+<h2>Zarządzaj ocenami</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Profile.Login)
+        </th>
+        <th>
+            Nazwa przepisu
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Rate)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Profile.Login)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Recipe.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Rate)
+        </td>
+        <td>
+            @Html.ActionLink("Usuń", "Delete", new { id = item.ID }, new {@class="btn btn-danger" })
+        </td>
+    </tr>
+}
+
+
+
+</table>
+@Html.ActionLink("Powrót do panelu administratora", "Index", "Admin")
+
+}
+else
+{
+    <h2>Brak uprawnień</h2>
+    <h3>Aby uzyskać dostęp @Html.ActionLink("zaloguj się", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" }) </h3>
+    @Html.ActionLink("Powrót", "Index", "Home")
+}

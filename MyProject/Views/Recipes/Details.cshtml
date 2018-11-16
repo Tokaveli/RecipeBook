@@ -1,0 +1,217 @@
+﻿@model MyProject.Models.Recipe
+
+@{
+    ViewBag.Title = @Html.DisplayFor(model => model.Name);
+}
+<h2>@Html.DisplayFor(model => model.Name)</h2> 
+<h4>by <b>@Html.ActionLink(Model.Profile.FirstName, "Index", "HisRecipe", new { name = Model.Profile.Login },null)</b></h4>
+
+
+
+
+@if (Context.User.IsInRole("Administrator") || Model.Profile.Login == User.Identity.Name)
+{ 
+    <a style="color:black" href="@Url.Action("Edit", new { id = Model.ID})">
+        <div class="glyphicon glyphicon-edit" aria-hidden="true" title="Edytuj"></div>
+    </a>
+    <a style="color:black" href="@Url.Action("Delete", new { id = Model.ID})">
+        <div class="glyphicon glyphicon-trash" aria-hidden="true" title="Usuń"></div>
+    </a>
+}
+<a style="color:black" href="@Url.Action("ContentToPDF", new { id = Model.ID, name = Model.Name})">
+    <div class="glyphicon glyphicon-print" aria-hidden="true" title="ExportPDF"></div>
+</a>
+
+
+<div class="row">
+    <div class="col-md-6">
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Categories.Name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Categories.Name)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Types.Name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Types.Name)
+            </dd>
+            <!--
+                    <dt>
+                        @Html.DisplayNameFor(model => model.DayTypes)
+                    </dt>
+
+                    @foreach (var item in Model.DayTypes)
+                    {
+                        <dd>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </dd>
+
+                    }
+            -->
+            <dt>
+                @Html.DisplayNameFor(model => model.Ratings) 
+            </dt>
+            <dd>
+                @if (@Model.Ratings.Count() == 0)
+                {
+                    <i>Brak oceny</i>
+                }
+                else
+                {
+                    @(Model.Ratings.Average(r => r.Rate)) <span style="color:gold" class="glyphicon glyphicon-star"></span>
+                }
+            </dd>
+            <p>
+            <dt>
+                @Html.DisplayNameFor(model => model.Components)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Components)
+            </dd>
+            </p>
+            <dt>
+
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+
+
+        </dl>
+    </div>
+    <div class="col-md-1">
+        <br />
+        @if (Request.IsAuthenticated)
+            {
+            <form method="post" action="~/Ratings/Create">
+                @Html.Label("Ocena")  <select name="Rate" class="carousel">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5" selected>5</option>
+                </select>
+                <input type="hidden" name="RecipeID" value="@Model.ID" />
+                <button type="submit">
+                    <span style="color:gold" class="glyphicon glyphicon-star"></span>
+                </button>
+            </form>}
+    </div>
+
+    @if (Request.IsAuthenticated)
+    {
+        if (Model.Likes.Where(like => like.Profile.Login == User.Identity.Name).Any())
+        {
+            <a style="color:red" href="@Url.Action("Unlike", "RecipeLikes", new { id = Model.ID, ReviewId = Model.ID, ProfileID = User.Identity.Name, RecipeID = Model.ID })">
+                <div class="glyphicon glyphicon-heart like liked" aria-hidden="true" title="Polubione"></div>
+            </a>
+        }
+        else
+        {
+            <a class="liked" href="@Url.Action("Like", "RecipeLikes", new { id = Model.ID, ReviewId = Model.ID, ProfileID = User.Identity.Name, RecipeID = Model.ID })">
+                <div class="glyphicon glyphicon-heart-empty like" aria-hidden="true" title="Lubię to!"></div>
+            </a>
+        }
+    }
+    <div class="col-md-5">
+        @if (@Model.Picture == null)
+            {
+            <i>Brak obrazka</i>
+        }
+        else
+        {
+            <img src="~/Pictures/@Model.Picture" alt="" align="top" height="200" width="200" />
+        }
+
+    </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-9">
+            <dl class="dl-horizontal">
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Comments)
+                </dt>
+
+                <dd>
+                    <table class="table">
+                        <tr>
+                            <th>Login</th>
+                            <th>Zawartosc</th>
+                            <th>Data</th>
+                        </tr>
+                        @foreach (var item in Model.Comments)
+            {
+                            <tr>
+
+                                <td>@Html.DisplayFor(modelItem => item.Profile.Login)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Content)</td>
+                                <td>@Html.DisplayFor(modelItem => item.CommentDate)</td>
+
+                                @if (Context.User.IsInRole("Administrator") || item.Profile.Login == User.Identity.Name)
+                                {
+                                    <td>@Html.ActionLink("Usuń", "Delete2", "Comments", new { id = item.ID }, new { onclick = "return confirm('Jesteś pewien, że chcesz usunąć ten komentarz?');", @class = "btn btn-danger" })</td>
+                                }
+                            </tr>
+
+                        }
+
+                    </table>
+
+                </dd>
+            </dl>
+        </div>
+
+        </div>
+  
+
+
+
+<div class="row">
+    <div class="col-md-1">
+    </div>
+    <div class="col-md-11">
+
+            @if (Request.IsAuthenticated)
+            {
+                <form method="post" action="~/Comments/Create">
+                    @Html.Label("Dodaj", htmlAttributes: new {@class= "col-md-1" })
+                    <!-- <input type="text" required="" name="Content" style="width:1000px; height:80px;max-width:50%;"> -->
+                    @Html.TextArea("Content",htmlAttributes: new { @class = "komentarz", required = "required" })<br />
+                    <input type="hidden" name="RecipeID" value="@Model.ID" /><br />
+                    <div class="row">
+                        <div class="col-md-6"></div>
+                            <div class="col-md-6">
+                                <input type="submit" class="btn btn-secondary" value="Wystaw">
+                            </div>
+                </form>
+                <br />
+
+            }
+
+    </div>
+
+</div>
+
+<p>
+
+    @Html.ActionLink("Powrót do listy przepisów", "Index")
+</p>

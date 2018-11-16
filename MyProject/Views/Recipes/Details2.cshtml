@@ -1,0 +1,100 @@
+﻿
+    @model MyProject.Models.Recipe
+
+    @{
+        ViewBag.Title = @Html.DisplayFor(model => model.Name);
+        @Layout = "~/Views/Shared/_Pdf.cshtml";
+    }
+    <h2>@Html.DisplayFor(model => model.Name)</h2>
+    <h4>by <b>@Model.Profile.FirstName</b></h4>
+
+<div class="row">
+    <div class="col-md-4">
+        @if (@Model.Picture == null)
+            {
+            <i>Brak obrazka</i>
+        }
+        else
+        {
+            <img src="~/Pictures/@Model.Picture" alt="" align="top" height="175" width="175" />
+        }
+
+    </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Categories.Name)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Categories.Name)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Types.Name)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Types.Name)
+                </dd>
+                <!--
+                        <dt>
+                            @Html.DisplayNameFor(model => model.DayTypes)
+                        </dt>
+
+                        @foreach (var item in Model.DayTypes)
+                        {
+                            <dd>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </dd>
+
+                        }
+                -->
+                <dt>
+                    @Html.DisplayNameFor(model => model.Ratings)
+                </dt>
+                <dd>
+                    @if (@Model.Ratings.Count() == 0)
+                    {
+                        <i>Brak oceny</i>
+                    }
+                    else
+                    {
+                        @(Model.Ratings.Average(r => r.Rate)) <span style="color:gold" class="glyphicon glyphicon-star"></span>
+                    }
+                </dd>
+                <p>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Components)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Components)
+                </dd>
+                </p>
+                <dt>
+
+                    @Html.DisplayNameFor(model => model.Description)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Description)
+                </dd>
+
+
+            </dl>
+        </div>
+
+    </div>
+

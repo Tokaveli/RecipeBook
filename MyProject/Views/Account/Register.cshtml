@@ -1,0 +1,82 @@
+﻿@model MyProject.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Rejestracja";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Stwórz nowe konto.</h4>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Label("Hasło", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Label("Potwiedź hasło", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Imie", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.Editor("FirstName", new { htmlAttributes = new { @class = "form-control", type = "text", required = "Pole 'Imie jest wymagane'" } })
+        </div>
+    </div>
+
+        <div class="form-group">
+            @Html.Label("Nazwisko", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.Editor("LastName", new { htmlAttributes = new { @class = "form-control" , type = "text", required = "Pole 'Nazwisko' jest wymagane'" } })
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Wiek", htmlAttributes: new { @class = "control-label col-md-2",  })
+            <div class="col-md-10">
+                @Html.Editor("Age", new { htmlAttributes = new { @class = "form-control", type = "number", required = "Pole 'Wiek jest wymagane'" } })
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Płeć", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="radio">
+                    Mężczyzna  @Html.RadioButton("IsMale", true, new { @checked = true }) 
+                    </div>
+                <div class="radio">
+                    Kobieta    @Html.RadioButton("IsMale", false) 
+                </div>
+            </div>
+         </div>
+
+
+
+
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="Zarejestruj" />
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
